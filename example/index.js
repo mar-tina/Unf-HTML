@@ -1,11 +1,16 @@
-import { UNF } from "../src/element.js";
+import { UNF, html } from "../src";
+import { User } from "./user.js";
+
+const firstName = "Heloo";
+
+function handleClick() {
+  console.log("Clicked div");
+}
 
 const newtemplate = html`
-  <div>Hello World</div>
+  <div>
+    Hello This is my ${User("Tina")} template ${firstName}
+  </div>
 `;
 
-const MyTemplate = UNF.createElement("my-template", newtemplate);
-
-MyTemplate.render();
-
-console.log(MyTemplate);
+UNF.Core.init("#app", newtemplate);
