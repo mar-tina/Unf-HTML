@@ -23,7 +23,6 @@ UNF.Core = (function() {
       tagName,
       class extends HTMLElement {
         connectedCallback() {
-          console.log(args);
           this._onMount();
         }
 
@@ -64,12 +63,8 @@ UNF.Core = (function() {
                     //   when calling addEventListener
                     tempholder[`${evt}`] = el.f;
                   });
-                } else {
-                  console.log("There are no dom events");
                 }
-                console.log("The val", x.type);
               });
-              console.log("THE args", this._variables);
             });
           }
         }
@@ -86,6 +81,24 @@ UNF.Core = (function() {
               }
             });
           });
+        }
+
+        _onUnMount() {
+          args.map(arg => {
+            arg.map(y => {
+              if (y.type === "cycle-events") {
+                y.all.map(el => {
+                  if (el.cycleType === "on-unmount") {
+                    el.f();
+                  }
+                });
+              }
+            });
+          });
+        }
+
+        disconnectedCallback() {
+          this._onUnMount();
         }
       }
     );
