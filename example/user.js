@@ -1,26 +1,16 @@
 import { UNF, html } from "../src";
 
-let firstName = {};
+let initState = {};
 
-let initialState = {
-  name: "Martina",
-  email: "tina@gmail.com"
-};
-
-var targetObj = {
-  name: "Tinaanan"
-};
-var targetProxy = new Proxy(firstName, {
-  set: function(firstName, key, value) {
-    console.log(`${key} set to ${value}`);
-    firstName[key] = value;
+var targetProxy = new Proxy(initState, {
+  set: function(initState, key, value) {
+    initState[key] = value;
     return true;
   }
 });
 
 const handleInputChange = e => {
   e.preventDefault();
-  targetObj.name = e.target.value;
   targetProxy.name = e.target.value;
 };
 
@@ -49,17 +39,17 @@ const methods = [
   },
   {
     type: "state-events",
-    all: [UNF.Events.bind("user-details", "first-name", firstName)]
+    all: [UNF.Events.bind("user-details", "first-name", initState)]
   }
 ];
 
 let newtemplate = html`
-  <div initialState=${initialState} id="myuser">
+  <div id="myuser">
     Hello This is my user
-    <p id="user-details">${firstName.name}</p>
+    <p id="user-details">${initState.name}</p>
 
     <div>
-      <input id="first-name" initialState=${initialState} value="" />
+      <input id="first-name" value=""/>
     </div>
   </div>
 `;
