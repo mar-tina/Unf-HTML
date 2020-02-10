@@ -17,9 +17,16 @@ UNF.Events = (function() {
     f: f
   });
 
+  let bind = (id, inputID, ...args) => ({
+    args: args,
+    id: id,
+    inputID: inputID
+  });
+
   var ePublic = {
     registerEvent: registerEvent,
-    registerLifeCycle: registerLifeCycle
+    registerLifeCycle: registerLifeCycle,
+    bind: bind
   };
 
   return ePublic;
