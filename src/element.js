@@ -12,9 +12,6 @@ UNF.Core = (function() {
     let el = document.querySelector(selector);
     el.attachShadow({ mode: "open" });
 
-    el.shadowRoot;
-    el.shadowRoot.host;
-
     el.shadowRoot.innerHTML = component.template;
   };
 
