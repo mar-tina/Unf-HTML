@@ -1,15 +1,17 @@
-import { UNF, html } from "../src";
-import "./user.js";
+import { UNF, html } from "../../../src";
+import "./components/todo.js";
 
-let appTemplate = html`
+
+
+let newtemplate = html`
   <div>
-    <h1> TO-DOs </h1
+    Hello world
     <div>
-        
+      <todo-app></todo-app>
     </div>
   </div>
 `;
 
-const appPage = () => appTemplate;
+const myTemplate = () => newtemplate;
 
-UNF.Core.init("#app", appPage);
+UNF.Core.init("#app", myTemplate());

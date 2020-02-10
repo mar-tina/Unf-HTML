@@ -23,7 +23,7 @@ UNF.Core = (function() {
       tagName,
       class extends HTMLElement {
         connectedCallback() {
-          console.log(args);
+          console.log("EVENTS", args);
           this._onMount();
         }
 
@@ -39,6 +39,7 @@ UNF.Core = (function() {
 
           this._registerEvents();
           this._bindEvents();
+          //   this._bindAttr();
         }
 
         _bindEvents() {
@@ -49,33 +50,66 @@ UNF.Core = (function() {
               arg.map(z => {
                 if (z.type === "state-events") {
                   z.all.map(el => {
-                    this._variables[
-                      `${el.id}`
-                    ] = this._shadowRoot.querySelector(`#${el.id}`);
+                    if (el === "el") {
+                      this._variables[
+                        `${el.id}`
+                      ] = this._shadowRoot.querySelector(`#${el.id}`);
 
-                    console.log("The div", this._variables[`${el.id}`]);
+                      console.log("The div", this._variables[`${el.id}`]);
 
-                    this._variables[
-                      `${el.inputID}`
-                    ] = this._shadowRoot.querySelector(`#${el.inputID}`);
-
-                    console.log("The input", this._variables[`${el.inputID}`]);
-
-                    this._variables[`${el.inputID}`].onkeyup = () => {
-                      this._variables[`${el.id}`].innerText = this._variables[
+                      this._variables[
                         `${el.inputID}`
-                      ].value;
-                    };
-                    this._variables[`${el.inputID}`].onkeydown = () => {
-                      this._variables[`${el.id}`].innerText = this._variables[
-                        `${el.inputID}`
-                      ].value;
-                    };
+                      ] = this._shadowRoot.querySelector(`#${el.inputID}`);
+
+                      console.log(
+                        "The input",
+                        this._variables[`${el.inputID}`]
+                      );
+
+                      this._variables[`${el.inputID}`].onkeyup = () => {
+                        this._variables[`${el.id}`].innerText = this._variables[
+                          `${el.inputID}`
+                        ].value;
+                      };
+                      this._variables[`${el.inputID}`].onkeydown = () => {
+                        this._variables[`${el.id}`].innerText = this._variables[
+                          `${el.inputID}`
+                        ].value;
+                      };
+                    }
                   });
                 }
               });
             });
           }
+        }
+
+        // _bindAttr() {
+        //   if (!Array.isArray(args) || !args.length) {
+        //     console.log("There are no events");
+        //   } else {
+        //     args.map(arg => {
+        //       arg.map(p => {
+        //         if (p.type === "state-events") {
+        //           p.all.map(el => {
+        //             if (el.type === "attr") {
+        //               console.log("This is the attr", el);
+        //               let todoState = this._shadowRoot.querySelector(
+        //                 `#${el.parent_id}`
+        //               );
+
+        //               let initialState = todoState.getAttribute("initState");
+        //               console.log("Initial State", initialState.todos);
+        //             }
+        //           });
+        //         }
+        //       });
+        //     });
+        //   }
+        // }
+
+        static get observedAttributes() {
+          return ["initState"];
         }
 
         _registerEvents() {
@@ -113,9 +147,11 @@ UNF.Core = (function() {
           args.map(arg => {
             arg.map(y => {
               if (y.type === "cycle-events") {
+                console.log("LIFECYLE UPPER", y);
                 y.all.map(el => {
                   if (el.cycleType === "on-mount") {
                     el.f();
+                    console.log("LIFECYLE", el);
                   }
                 });
               }
@@ -135,6 +171,10 @@ UNF.Core = (function() {
               }
             });
           });
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          console.log("Custom square element attributes changed.", name);
         }
 
         disconnectedCallback() {

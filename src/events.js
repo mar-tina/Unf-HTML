@@ -18,15 +18,25 @@ UNF.Events = (function() {
   });
 
   let bind = (id, inputID, ...args) => ({
+    type: "el",
     args: args,
     id: id,
     inputID: inputID
   });
 
+  let setAtrr = (cycleType, id, attr, f) => ({
+    cycleType: cycleType,
+    type: "attr",
+    id: id,
+    attr: { ...attr },
+    f: f
+  });
+
   var ePublic = {
     registerEvent: registerEvent,
     registerLifeCycle: registerLifeCycle,
-    bind: bind
+    bind: bind,
+    setAtrr: setAtrr
   };
 
   return ePublic;
