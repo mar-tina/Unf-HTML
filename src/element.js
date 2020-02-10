@@ -35,32 +35,50 @@ UNF.Core = (function() {
         connectedCallback() {
           console.log("Im running");
           console.log(args);
-
-          var container = {};
-
-          if (!Array.isArray(args) || !args.length) {
-            console.log("There are no events");
-          } else {
-            args.map(arg => {
-              //   this._`${arg.elementID}` = this._shadowRoot.querySelector(
-              //     `#${arg.elementID}`
-              //   );
-              container[`${arg.elementID}`] = "";
-
-              console.log("THE ID", container);
-            });
-          }
         }
         constructor() {
           super();
           const renderTemplate = document.createElement("template");
           this._shadowRoot = this.attachShadow({ mode: "open" });
+          this._container = new Map();
+          this._variables = {};
 
           renderTemplate.innerHTML = component.template;
-          console.log("The template", component.prototype);
           this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
 
-          console.log("Is it even running");
+          this._registerEvents();
+        }
+
+        _registerEvents() {
+          if (!Array.isArray(args) || !args.length) {
+            console.log("There are no events");
+          } else {
+            args.map(arg => {
+              arg.map(x => {
+                this._container.set(`${x.elementID}`, x.elementID);
+                this._container.set(`${x.eventName}`, x.eventName);
+
+                //Get a reference to the element
+                this._variables[
+                  this._container.get(`${x.elementID}`)
+                ] = this._shadowRoot.querySelector(`#${x.elementID}`);
+
+                //create local event var holder
+                let evt = this._container.get(`${x.eventName}`);
+
+                let tempholder = this._variables[
+                  this._container.get(`${x.elementID}`)
+                ];
+
+                // Manually set the property for the div
+                //Why ? Because you cannot dynamically pass the event type
+                //when calling add event listener
+                tempholder[`${evt}`] = () =>
+                  console.log(" I AM REALLYY CLICKING THIS ");
+              });
+              console.log("THE args", this._variables);
+            });
+          }
         }
       }
     );

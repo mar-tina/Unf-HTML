@@ -2,12 +2,14 @@ import { UNF, html } from "../src";
 
 const firstName = "Tina";
 
-const events = UNF.Events.registerEvent(
-  "onclick",
-  "user-component",
-  "myuser",
-  () => console.log("hello")
-);
+const events = [
+  UNF.Events.registerEvent("onclick", "myuser", () =>
+    console.log("Clicked #myuser")
+  ),
+  UNF.Events.registerEvent("onblur", "myuser", () =>
+    console.log("Blurred #myuser")
+  )
+];
 
 let newtemplate = html`
   <div id="myuser">

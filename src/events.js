@@ -6,9 +6,8 @@ export const onClick = f => ({
 });
 
 UNF.Events = (function() {
-  let registerEvent = (eventName, tagName, elementID, f) => ({
+  let registerEvent = (eventName, elementID, f) => ({
     eventName: eventName,
-    tagName: tagName,
     elementID: elementID,
     f: f
   });
