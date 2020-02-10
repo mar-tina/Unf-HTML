@@ -12,8 +12,14 @@ UNF.Events = (function() {
     f: f
   });
 
+  let registerLifeCycle = (cycleType, f) => ({
+    cycleType: cycleType,
+    f: f
+  });
+
   var ePublic = {
-    registerEvent: registerEvent
+    registerEvent: registerEvent,
+    registerLifeCycle: registerLifeCycle
   };
 
   return ePublic;
