@@ -1,15 +1,14 @@
-import { UNF, html, onClick } from "../src";
-import { User } from "./user.js";
+import { UNF, html } from "../src";
+import "./user.js";
 
 const firstName = "Heloo";
 
-// function handleClick() {
-//   console.log("Clicked div");
-// }
-
 let newtemplate = html`
-  <div ${onClick(() => console.log("Been clicked"))}>
-    Hello This is my ${User("Tina")} template ${firstName}
+  <div>
+    Hello This is my template ${firstName}
+    <div>
+      <user-component></user-component>
+    </div>
   </div>
 `;
 

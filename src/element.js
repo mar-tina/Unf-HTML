@@ -1,18 +1,9 @@
-import * as snabbdom from "snabbdom";
-var patch = snabbdom.init([
-  // Init patch function with chosen modules
-  require("snabbdom/modules/class").default, // makes it easy to toggle classes
-  require("snabbdom/modules/props").default, // for setting properties on DOM elements
-  require("snabbdom/modules/style").default, // handles styling on elements with support for animations
-  require("snabbdom/modules/eventlisteners").default // attaches event listeners
-]);
-var h = require("snabbdom/h").default;
-
-export const html = (strings, ...args) =>
-  strings.reduce(
+export const html = (strings, ...args) => ({
+  template: strings.reduce(
     (acc, currElement, index) => acc + currElement + (args[index] || ""),
     ""
-  );
+  )
+});
 
 export let UNF = UNF || {};
 
@@ -24,15 +15,98 @@ UNF.Core = (function() {
     el.shadowRoot;
     el.shadowRoot.host;
 
-    console.log("THis is the component", component);
-    el.shadowRoot.innerHTML = component;
+    el.shadowRoot.innerHTML = component.template;
+  };
 
-    let childNodes = el.shadowRoot.childNodes;
-    console.log("The child nodes", childNodes);
+  let render = function(tagName, component, ...args) {
+    customElements.define(
+      tagName,
+      class extends HTMLElement {
+        connectedCallback() {
+          this._onMount();
+        }
+
+        constructor() {
+          super();
+          const renderTemplate = document.createElement("template");
+          this._shadowRoot = this.attachShadow({ mode: "open" });
+          this._container = new Map();
+          this._variables = {};
+
+          renderTemplate.innerHTML = component.template;
+          this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
+
+          this._registerEvents();
+        }
+
+        _registerEvents() {
+          if (!Array.isArray(args) || !args.length) {
+            console.log("There are no events");
+          } else {
+            args.map(arg => {
+              arg.map(x => {
+                if (x.type === "dom-events") {
+                  x.all.map(el => {
+                    this._container.set(`${el.elementID}`, el.elementID);
+                    this._container.set(`${el.eventName}`, el.eventName);
+                    //Get a reference to the element
+                    this._variables[
+                      this._container.get(`${el.elementID}`)
+                    ] = this._shadowRoot.querySelector(`#${el.elementID}`);
+                    //create local event var holder
+                    let evt = this._container.get(`${el.eventName}`);
+                    let tempholder = this._variables[
+                      this._container.get(`${el.elementID}`)
+                    ];
+                    //   Manually set the property for the div
+                    //   Why ? Because you cannot dynamically pass the event type
+                    //   when calling addEventListener
+                    tempholder[`${evt}`] = el.f;
+                  });
+                }
+              });
+            });
+          }
+        }
+
+        _onMount() {
+          args.map(arg => {
+            arg.map(y => {
+              if (y.type === "cycle-events") {
+                y.all.map(el => {
+                  if (el.cycleType === "on-mount") {
+                    el.f();
+                  }
+                });
+              }
+            });
+          });
+        }
+
+        _onUnMount() {
+          args.map(arg => {
+            arg.map(y => {
+              if (y.type === "cycle-events") {
+                y.all.map(el => {
+                  if (el.cycleType === "on-unmount") {
+                    el.f();
+                  }
+                });
+              }
+            });
+          });
+        }
+
+        disconnectedCallback() {
+          this._onUnMount();
+        }
+      }
+    );
   };
 
   var uPublic = {
-    init: init
+    init: init,
+    render: render
   };
 
   return uPublic;
