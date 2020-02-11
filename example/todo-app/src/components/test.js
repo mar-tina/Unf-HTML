@@ -1,5 +1,10 @@
 import { UNF, html } from "../../../../src";
 
+let styleObject = `
+    color: blue;
+    font-size: 50px;
+`;
+
 let BaseEL = {
   data: {
     name: "Tina",
@@ -17,7 +22,7 @@ let BaseEL = {
 };
 
 let testTemplate = html`
-  <div id="hello-test">Hello Test World</div>
+  <div style="${styleObject}" id="hello-test">Hello Test World</div>
 `;
 
 BaseEL.template = testTemplate;
