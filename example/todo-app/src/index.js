@@ -1,13 +1,11 @@
 import { UNF, html } from "../../../src";
-import "./components/todo.js";
-
-
+import "./components/test.js";
 
 let newtemplate = html`
   <div>
     Hello world
     <div>
-      <todo-app></todo-app>
+      <test-list> </test-list>
     </div>
   </div>
 `;
