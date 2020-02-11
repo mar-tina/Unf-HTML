@@ -8,6 +8,12 @@ export const html = (strings, ...args) => ({
 export let UNF = UNF || {};
 
 UNF.Core = (function() {
+  /**
+   * Initializes the application .
+   * @param {string} selector
+   * @param {html-template} component
+   * @returns {void}
+   */
   let init = function(selector, component) {
     let el = document.querySelector(selector);
     el.attachShadow({ mode: "open" });
@@ -23,6 +29,12 @@ UNF.Core = (function() {
 })();
 
 UNF.Base = (function() {
+  /**
+   *Creates the element and provides a global object that is accessible to the
+   component and other parts of the code
+   * @param {BaseElement} args
+   * @returns {BaseElement} - returns the element passed but with the properties set in the class
+   */
   let createElement = args => {
     let classInstance = {};
     let BaseElement = {
@@ -51,16 +63,35 @@ UNF.Base = (function() {
     return BaseElement;
   };
 
+  /**
+   * Renders the element to screen by calling define on customElements
+   * @param {string} tagName
+   * @param {HTMLelement} component
+   * @returns {void}
+   */
   let render = (tagName, component) => {
     customElements.define(tagName, component);
   };
 
+  /**
+   * Fetches an element by ID
+   * @param {THIS} elem - object with reference to the currenc class in execution
+   * @param {string} elID -ID of the element being fetched
+   * @returns {HTMLElement}
+   */
   let getElement = (elem, elID) => {
     elem._variables[`${elID}`] = elem._shadowRoot.querySelector(`#${elID}`);
 
     return elem._variables[`${elID}`];
   };
 
+  /**
+   * Listens for events on elements
+   * @param {string} type - they type of event to listen to i.e {'onclick'}
+   * @param {HTMLElement} elem - the element resulting from calling getELement
+   * @param {function} f - The function that executes when event occurs
+   * @returns {void}
+   */
   let addListener = (type, elem, f) => {
     elem[`${type}`] = f;
   };
@@ -74,5 +105,3 @@ UNF.Base = (function() {
 
   return bPublic;
 })();
-
-

@@ -32,6 +32,11 @@ UNF.Events = (function() {
     f: f
   });
 
+  /**
+   * Passes the 'this' object to all the executing functions providing reference to the current execution context
+   * @param {THIS} elem - object that has reference to the current execution context
+   * @param {*} args - methods object passed from the UI
+   */
   let registerEvents = (elem, args) => {
     if (isEmpty(args)) {
       console.log("There are no events", args);
@@ -40,7 +45,6 @@ UNF.Events = (function() {
       arrayOfFuncs.forEach(func => {
         console.log("The func", func(elem));
       });
-      console.log("THE ARGS", arrayOfFuncs);
     }
   };
 
