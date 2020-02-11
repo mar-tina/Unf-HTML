@@ -31,12 +31,9 @@ UNF.Base = (function() {
       template: args.template
     };
 
-    console.log("I am here", args);
-
     classInstance = class extends HTMLElement {
       constructor() {
         super();
-        console.log("The props", BaseElement);
 
         const renderTemplate = document.createElement("template");
         this._shadowRoot = this.attachShadow({ mode: "open" });
@@ -60,16 +57,12 @@ UNF.Base = (function() {
 
   let getElement = (elem, elID) => {
     elem._variables[`${elID}`] = elem._shadowRoot.querySelector(`#${elID}`);
-    console.log("The elements", elem._variables[`${elID}`]);
 
     return elem._variables[`${elID}`];
   };
 
   let addListener = (type, elem, f) => {
-    console.log("Passed Element", elem, "Type", typeof "" + type);
-
     elem[`${type}`] = f;
-    console.log("ELEM TYPE", elem[`${type}`]);
   };
 
   let bPublic = {
@@ -81,3 +74,5 @@ UNF.Base = (function() {
 
   return bPublic;
 })();
+
+
