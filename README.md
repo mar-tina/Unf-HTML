@@ -1,4 +1,4 @@
-# unnecessary-framework
+# [Unf] unnecessary-framework
 An unnecessary-framework built in JS to understand JS internals
 
 Built on top of shadow dom using the base Web component classes structure
