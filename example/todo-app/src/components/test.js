@@ -18,6 +18,11 @@ let BaseEL = {
       let resEL = UNF.Base.getElement(elem, "hello-test");
       UNF.Base.addListener("onclick", resEL, () => console.log("Clicking div"));
     }
+  },
+  lifecycle: {
+    onMount: function(elem) {
+      console.log("The context", elem);
+    }
   }
 };
 
@@ -26,6 +31,8 @@ let testTemplate = html`
 `;
 
 BaseEL.template = testTemplate;
+
+console.log("In UI The Lifecycle", BaseEL.lifecycle);
 
 let base = UNF.Base.createElement(BaseEL);
 

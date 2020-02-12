@@ -6,16 +6,18 @@ export const onClick = f => ({
 });
 
 UNF.Events = (function() {
-  let registerEvent = (eventName, elementID, f) => ({
-    eventName: eventName,
-    elementID: elementID,
-    f: f
-  });
-
-  let registerLifeCycle = (cycleType, f) => ({
-    cycleType: cycleType,
-    f: f
-  });
+  /**
+   * Passes the 'this' object to all the executing functions when node is mounted
+   * @param {THIS} elem - object that has reference to the current execution context
+   * @param {function} f - onmount function to be called in the connectedCallback function
+   */
+  let bindOnMount = (elem, f) => {
+    if (typeof f !== "undefined") {
+      f(elem);
+    } else {
+      console.log("Onmount is undefined");
+    }
+  };
 
   let bind = (id, inputID, ...args) => ({
     type: "el",
@@ -43,17 +45,16 @@ UNF.Events = (function() {
     } else {
       let arrayOfFuncs = Object.values(args);
       arrayOfFuncs.forEach(func => {
-        console.log("The func", func(elem));
+        func(elem);
       });
     }
   };
 
   var ePublic = {
-    registerEvent: registerEvent,
-    registerLifeCycle: registerLifeCycle,
     bind: bind,
     setAtrr: setAtrr,
-    registerEvents: registerEvents
+    registerEvents: registerEvents,
+    bindOnMount: bindOnMount
   };
 
   return ePublic;

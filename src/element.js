@@ -40,10 +40,15 @@ UNF.Base = (function() {
     let BaseElement = {
       data: args.data,
       methods: args.methods,
-      template: args.template
+      template: args.template,
+      lifecyle: args.lifecycle
     };
 
     classInstance = class extends HTMLElement {
+      connectedCallback() {
+        console.log("The lifecycle", BaseElement.lifecyle.onMount);
+        UNF.Events.bindOnMount(this, BaseElement.lifecyle.onMount);
+      }
       constructor() {
         super();
 
