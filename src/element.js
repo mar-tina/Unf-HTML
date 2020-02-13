@@ -7,16 +7,18 @@ export const html = (strings, ...args) => ({
 
 export let UNF = UNF || {};
 
-UNF.Core = (function() {
+UNF.Core = (function () {
   /**
    * Initializes the application .
    * @param {string} selector
    * @param {html-template} component
    * @returns {void}
    */
-  let init = function(selector, component) {
+  let init = function (selector, component) {
     let el = document.querySelector(selector);
-    el.attachShadow({ mode: "open" });
+    el.attachShadow({
+      mode: "open"
+    });
 
     el.shadowRoot.innerHTML = component.doc;
   };
@@ -28,7 +30,7 @@ UNF.Core = (function() {
   return uPublic;
 })();
 
-UNF.Base = (function() {
+UNF.Base = (function () {
   /**
    *Creates the element and provides a global object that is accessible to the
    component and other parts of the code
@@ -40,21 +42,34 @@ UNF.Base = (function() {
     let BaseElement = {
       data: args.data,
       methods: args.methods,
-      template: args.template
+      template: args.template,
+      lifecyle: args.lifecycle
     };
 
     classInstance = class extends HTMLElement {
+      connectedCallback() {
+        UNF.Events.initState(this, BaseElement.data);
+        console.log("The lifecycle", BaseElement.lifecyle.onMount);
+        UNF.Events.bindCycle(this, BaseElement.lifecyle.onMount);
+        // UNF.Events.registerProps(this);
+      }
       constructor() {
         super();
 
         const renderTemplate = document.createElement("template");
-        this._shadowRoot = this.attachShadow({ mode: "open" });
+        this._shadowRoot = this.attachShadow({
+          mode: "open"
+        });
         this._container = new Map();
         this._variables = {};
 
         renderTemplate.innerHTML = BaseElement.template.doc;
         this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
         UNF.Events.registerEvents(this, BaseElement.methods);
+      }
+
+      disconnectedCallback() {
+        UNF.Events.bindCycle(this, BaseElement.lifecyle.onUnMount);
       }
     };
 
@@ -73,6 +88,7 @@ UNF.Base = (function() {
     customElements.define(tagName, component);
   };
 
+  
   /**
    * Fetches an element by ID
    * @param {THIS} elem - object with reference to the currenc class in execution
@@ -84,6 +100,8 @@ UNF.Base = (function() {
 
     return elem._variables[`${elID}`];
   };
+
+  let bindel = (ctx, elID, ...args) => {};
 
   /**
    * Listens for events on elements
