@@ -108,8 +108,9 @@ let addListenerForAllTodos = function (ctx, docToRerender) {
 
       let element = UNF.Base.getElement(ctx, "todo-list")
       let res = todoList(ctx.state.todos);
-      element.innerHTML = res.doc
-      console.log("THese are the current todos", localState.state.todos);
+      if (res.doc === undefined) {
+        element.innerHTML = `<div> TodoList is empty </div> `
+      }
       addListenerForAllTodos(ctx, docToRerender)
     });
   })
