@@ -48,7 +48,8 @@ UNF.Events = (function () {
   };
 
   let rerender = (elem, content) => {
-    elem.innerHTML = content;
+    console.log("This is the template being passed", content);
+    elem.innerHTML = content.doc;
   };
 
   var ePublic = {

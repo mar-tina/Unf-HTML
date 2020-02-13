@@ -41,7 +41,9 @@ function updateLocalState(newState) {
 let BaseEL = {
   data: {
     name: "",
-    email: "tina@gmail"
+    email: "tina@gmail",
+    todo: "",
+    todos: []
   },
   methods: {
     loadState: function (elem) {
@@ -50,21 +52,40 @@ let BaseEL = {
     handleClick: function (elem) {
       let resEL = UNF.Base.getElement(elem, "hello-test");
       UNF.Base.addListener("onclick", resEL, () => console.log("Clicking div"));
+
+
     },
+
+    handleSubmit: function (ctx) {
+      let submitEl = UNF.Base.getElement(ctx, "submit");
+      UNF.Base.addListener("onclick", submitEl, (e) => {
+        e.preventDefault();
+        ctx.state.todos.push(ctx.state.todo);
+        //Update the local state object
+        updateLocalState(ctx.state);
+        // targetProxy.state = ctx.state;
+
+        let docToRerender = UNF.Base.getElement(ctx, "todo-list");
+        UNF.Events.rerender(docToRerender, todoList(localState.state.todos))
+        console.log("IN LOCAL STATE", localState.state.todo);
+        console.log("The todos", ctx.state.todos);
+      })
+    },
+
     bindInputValue: function (ctx) {
       let inputEl = UNF.Base.getElement(ctx, "todo-id");
       UNF.Base.addListener("oninput", inputEl, (e) => {
         console.log("Input Value", e.target.value)
-        ctx.state.name = e.target.value
+        ctx.state.todo = e.target.value
         console.log("THE state", ctx.state);
         updateLocalState(ctx.state);
         targetProxy.state = ctx.state;
 
-        let i = 0;
-
-        let docToRerender = UNF.Base.getElement(ctx, "todo-list");
-        UNF.Events.rerender(docToRerender, todoList() + "hsihs" + localState.state.name)
-        console.log("IN LOCAL STATE", localState.state.name);
+        //Get a reference to the element that is being re-rendered
+        // let docToRerender = UNF.Base.getElement(ctx, "todo-list");
+        // UNF.Events.rerender(docToRerender, todoList(localState.todos) + localState.state.todos);
+        // console.log("IN LOCAL STATE", localState.state.todo);
+        // console.log("The todos", ctx.state.todos);
       })
     }
   },
@@ -88,17 +109,38 @@ function isEmpty(obj) {
   return true;
 }
 
-let todoList = () => {
-  console.log("Proxy name", targetProxy.state);
-  if (targetProxy.state.name === "") {
-    return `<div> List is empty </div>`
+function isArrayEmpty(arr) {
+  if (arr === undefined || arr.length == 0) {
+    return true;
   }
-  return `<div> Hello there new div </div>`
+  return false;
+}
+
+let todoList = (todos) => {
+  console.log("Proxy name", targetProxy.state);
+  // if (localState.state.name === "" || localState.state.name === undefined) {
+  //   return `<div> List is empty </div>`
+  // }
+  // return `<div> Hello there new div </div>`
+  if (isArrayEmpty(todos)) {
+    return `<div> TODOs is empty </div>`
+  }
+
+  return (
+    html `
+        ${todos.map(x => (
+          `<div> ${x} </div>`
+        ))}
+      `
+  )
+
+  console.log("The todos", todos);
 }
 
 let testTemplate = html `
   <div style="${styleObject}" id="hello-test">
     <input id="todo-id" placeholder="TODO" value />
+    <button id="submit"> Submit </button>
     <div id="todo-list"> ${todoList()} </div>
   </div>
 `;
