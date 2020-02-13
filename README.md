@@ -12,7 +12,7 @@ ToDos :
   - Setup a template that allows implementation of native listeners through a ``` registerEvents() ``` function
   - Setup simple data binding across an input element and a display element i.e a div
   
-- [ ] Simple Example App [wip]
+- [x] Simple Example App [wip]
   - Setup a simple todo app that in examples folder as a test-bed for the implementation of the frameowk
-- [ ] Handling State
+- [x] Handling State
   
