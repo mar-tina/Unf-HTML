@@ -1,38 +1,25 @@
-import { UNF } from "./element.js";
+import {
+  UNF
+} from "./element.js";
 
 export const onClick = f => ({
   type: "event",
   click: f
 });
 
-UNF.Events = (function() {
+UNF.Events = (function () {
   /**
-   * Passes the 'this' object to all the executing functions when node is mounted
+   * Passes the 'this' object to all the executing functions when node is mounted or unmounted
    * @param {THIS} elem - object that has reference to the current execution context
    * @param {function} f - onmount function to be called in the connectedCallback function
    */
-  let bindOnMount = (elem, f) => {
+  let bindCycle = (elem, f) => {
     if (typeof f !== "undefined") {
       f(elem);
     } else {
       console.log("Onmount is undefined");
     }
   };
-
-  let bind = (id, inputID, ...args) => ({
-    type: "el",
-    args: args,
-    id: id,
-    inputID: inputID
-  });
-
-  let setAtrr = (cycleType, id, attr, f) => ({
-    cycleType: cycleType,
-    type: "attr",
-    id: id,
-    attr: { ...attr },
-    f: f
-  });
 
   /**
    * Passes the 'this' object to all the executing functions providing reference to the current execution context
@@ -50,11 +37,26 @@ UNF.Events = (function() {
     }
   };
 
+  let registerProps = elem => {
+    let props = elem.getAttribute("props");
+    console.log("The props", JSON.parse(props));
+  };
+
+  let initState = (ctx, state) => {
+    ctx.state = state
+    console.log(ctx.state);
+  };
+
+  let rerender = (elem, content) => {
+    elem.innerHTML = content;
+  };
+
   var ePublic = {
-    bind: bind,
-    setAtrr: setAtrr,
     registerEvents: registerEvents,
-    bindOnMount: bindOnMount
+    bindCycle: bindCycle,
+    registerProps: registerProps,
+    initState: initState,
+    rerender: rerender
   };
 
   return ePublic;
