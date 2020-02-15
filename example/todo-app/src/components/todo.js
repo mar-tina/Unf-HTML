@@ -13,6 +13,9 @@ import {
 } from "./teststyle.js";
 
 async function TodoApp() {
+  this.data = {
+    todos: []
+  }
   this.lifecyle.onMount = (ctx) => {
     console.log("I have the context", ctx);
   }
