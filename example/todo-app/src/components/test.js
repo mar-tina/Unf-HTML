@@ -1,7 +1,9 @@
 import {
   UNF,
-  html
-} from "../../../../src";
+  html,
+  unfBaseElement
+} from '../../../../dist/index.js';
+
 import "./todo.js";
 
 import {
@@ -131,7 +133,6 @@ let todoList = (todos) => {
               </p>
 
               <div>
-                <todo-app> </todo-app>
               </div>
             </div>`
           ))}
