@@ -1,5 +1,5 @@
 # [Unf] unnecessary-framework
-An unnecessary-framework built in JS to understand JS internals using Shadow Dom
+An framework built in JS to understand JS internals using Shadow Dom
 
 ToDos :
 - [x] Handle Initialization
