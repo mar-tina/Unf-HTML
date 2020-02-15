@@ -37,8 +37,8 @@ async function TodoApp() {
       let changeElButton = UNF.Base.getElement(ctx, "change-state");
       UNF.Base.addListener("onclick", changeElButton, (e) => {
         ctx.state.todos.push(ctx.state.todo);
-        let watchFood = this.watchers.onTodoChanged(ctx, "todos-list");
-        watchFood.todos = ctx.state.todos;
+        let watchTodo = this.watchers.onTodoChanged(ctx, "todos-list");
+        watchTodo.todos = ctx.state.todos;
 
         addListenerForAllTodos(ctx, this.watchers);
       })
@@ -85,12 +85,12 @@ let addListenerForAllTodos = function (ctx, watchers) {
     element = UNF.Base.getElement(ctx, todo.id)
     UNF.Base.addListener("onclick", element, (e) => {
 
-      let watchFood = watchers.onTodoChanged(ctx, "todos-list");
+      let watchTodo = watchers.onTodoChanged(ctx, "todos-list");
       ctx.state.todos = ctx.state.todos.filter(function (value, index, arr) {
         return value.id != todo.id;
       });
 
-      watchFood.todos = ctx.state.todos
+      watchTodo.todos = ctx.state.todos
       addListenerForAllTodos(ctx, watchers);
 
     });
