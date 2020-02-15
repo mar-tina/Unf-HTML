@@ -37,11 +37,7 @@ let BaseApp = {
 }
 
 var baseApp = {
-  data: {
-    food: "milk and cookies",
-    diet: "none",
-    todos: []
-  },
+  data: {},
 
   methods: {
     useState: function (ctx) {
