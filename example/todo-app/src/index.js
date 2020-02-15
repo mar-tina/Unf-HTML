@@ -1,7 +1,7 @@
 import {
   UNF,
   html
-} from "../../../src";
+} from '../../../dist/index.js';
 import "./components/test.js";
 
 let props = {
@@ -10,7 +10,7 @@ let props = {
 
 let newtemplate = html `
   <div>
-      <!-- <test-list props=""> </test-list> -->
+      <test-list props=""> </test-list>
       <todo-app> </todo-app>
   </div>
 `;
