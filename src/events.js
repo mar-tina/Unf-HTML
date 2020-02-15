@@ -1,6 +1,8 @@
 import {
-  UNF
+  UNF,
+  html
 } from "./element.js";
+
 
 export const onClick = f => ({
   type: "event",
@@ -37,27 +39,52 @@ UNF.Events = (function () {
     }
   };
 
-  let registerProps = elem => {
-    let props = elem.getAttribute("props");
-    console.log("The props", JSON.parse(props));
+  /**
+   * Passes the 'this' object to all the proxies providing reference to the current execution context
+   * @param {THIS} elem - object that has reference to the current execution context
+   * @param {*} proxies
+   */
+  let registerProxies = (elem, proxies) => {
+    console.log("Registering proxies");
+    if (isEmpty(proxies)) {
+      console.log("There are no proxies", proxies);
+    } else {
+      let arrayOfFuncs = Object.values(proxies);
+      arrayOfFuncs.forEach(func => {
+        func(elem);
+      });
+    }
   };
 
   let initState = (ctx, state) => {
     ctx.state = state
-    console.log(ctx.state);
   };
 
   let rerender = (elem, content) => {
-    console.log("This is the template being passed", content);
+
+    //The divs are separated by commas that are shown in the ui.
+    // let res = content.doc.replace(/,/g, " ");
+    console.log("THE RERENDER COMPONENT", content);
     elem.innerHTML = content.doc;
   };
+
+  let bindRenderToStateChange = (ctx, elID, component, state) => {
+    // let docToBind = UNF.Base.getELement(ctx, elID);
+    let docToRerender = UNF.Base.getElement(ctx, elID);
+    let res = component(state)
+    if (res.doc === undefined) {
+      UNF.Events.rerender(docToRerender, html `<div> TodoList is empty </div>,`)
+    }
+    UNF.Events.rerender(docToRerender, component(state))
+  }
 
   var ePublic = {
     registerEvents: registerEvents,
     bindCycle: bindCycle,
-    registerProps: registerProps,
     initState: initState,
-    rerender: rerender
+    rerender: rerender,
+    registerProxies: registerProxies,
+    bindRenderToStateChange: bindRenderToStateChange
   };
 
   return ePublic;

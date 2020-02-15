@@ -1,3 +1,5 @@
+import onChange from 'on-change';
+
 export const html = (strings, ...args) => ({
   doc: strings.reduce(
     (acc, currElement, index) => acc + currElement + (args[index] || ""),
@@ -5,7 +7,7 @@ export const html = (strings, ...args) => ({
   )
 });
 
-export let UNF = UNF || {};
+export let UNF = {};
 
 UNF.Core = (function () {
   /**
@@ -43,15 +45,14 @@ UNF.Base = (function () {
       data: args.data,
       methods: args.methods,
       template: args.template,
-      lifecyle: args.lifecycle
+      lifecyle: args.lifecycle,
+      watcher: {},
     };
+
 
     classInstance = class extends HTMLElement {
       connectedCallback() {
-        UNF.Events.initState(this, BaseElement.data);
-        console.log("The lifecycle", BaseElement.lifecyle.onMount);
         UNF.Events.bindCycle(this, BaseElement.lifecyle.onMount);
-        // UNF.Events.registerProps(this);
       }
       constructor() {
         super();
@@ -63,18 +64,47 @@ UNF.Base = (function () {
         this._container = new Map();
         this._variables = {};
 
-        renderTemplate.innerHTML = BaseElement.template.doc;
-        this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
-        UNF.Events.registerEvents(this, BaseElement.methods);
+        UNF.Events.initState(this, BaseElement.data);
+        this.state.watcher = this._onChanged;
+
+
+        if (isFunction(BaseElement.template)) {
+          let res = BaseElement.template();
+          renderTemplate.innerHTML = res.doc;
+          this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
+          UNF.Events.registerEvents(this, BaseElement.methods);
+        } else {
+          renderTemplate.innerHTML = BaseElement.template.doc;
+          this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
+          UNF.Events.registerEvents(this, BaseElement.methods);
+        }
+      }
+
+      _onChanged(f, objToWatch) {
+        const handler = {
+          get: (target, property, receiver) => {
+            if (property in target) {
+              f();
+              console.log(`GET ${property}`);
+              return Reflect.get(target, property, receiver);
+            }
+            return 'Oops! This property does not exist.';
+          },
+          set: (target, property, value, receiver) => {
+            f();
+            return Reflect.set(target, property, value);
+          }
+        };
+        return new Proxy(objToWatch, handler);
       }
 
       disconnectedCallback() {
         UNF.Events.bindCycle(this, BaseElement.lifecyle.onUnMount);
       }
+
     };
 
     BaseElement.ci = classInstance;
-
     return BaseElement;
   };
 
@@ -85,10 +115,12 @@ UNF.Base = (function () {
    * @returns {void}
    */
   let render = (tagName, component) => {
+    console.log("The component", component === undefined);
     customElements.define(tagName, component);
+    return component;
   };
 
-  
+
   /**
    * Fetches an element by ID
    * @param {THIS} elem - object with reference to the currenc class in execution
@@ -97,12 +129,10 @@ UNF.Base = (function () {
    */
   let getElement = (elem, elID) => {
     elem._variables[`${elID}`] = elem._shadowRoot.querySelector(`#${elID}`);
-
     return elem._variables[`${elID}`];
   };
 
   let bindel = (ctx, elID, ...args) => {};
-
   /**
    * Listens for events on elements
    * @param {string} type - they type of event to listen to i.e {'onclick'}
@@ -123,3 +153,21 @@ UNF.Base = (function () {
 
   return bPublic;
 })();
+
+function onChanged(stateObject) {
+  const handler = {
+    get(target, property, receiver) {
+      if (property in target) {
+        console.log(`GET ${property}`);
+        return target[property];
+      }
+      return 'Oops! This property does not exist.';
+    }
+  };
+
+  const proxiedObject = new Proxy(stateObject, handler);
+}
+
+function isFunction(functionToCheck) {
+  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+}
