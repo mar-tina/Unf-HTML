@@ -5,23 +5,30 @@ import {
 } from '../../../../src'
 
 import {
+  styleObject,
+  inputObject,
+  buttonObject,
+  svgObject,
   todoItem
-} from './teststyle.js';
+} from "./teststyle.js";
 
 async function TodoApp() {
-  this.lifecyle.onMount = (ctx) => {}
+  this.lifecyle.onMount = (ctx) => {
+    console.log("I have the context", ctx);
+  }
 
   this.watchers = {
-    onTodosChanged: (ctx, elID) => {
+    onTodoChanged: (ctx, elID) => {
+
       let f = () => {
         UNF.Events.bindRenderToStateChange(ctx, elID, todoList, ctx.state["todos"]);
       }
 
-      let foodProxy = ctx.state.watcher(f, {
+      let todoProxy = ctx.state.watcher(f, {
         todos: ctx.state["todos"]
       })
 
-      return foodProxy
+      return todoProxy
     },
   }
 
@@ -30,6 +37,9 @@ async function TodoApp() {
       let changeElButton = UNF.Base.getElement(ctx, "change-state");
       UNF.Base.addListener("onclick", changeElButton, (e) => {
         ctx.state.todos.push(ctx.state.todo);
+        let watchFood = this.watchers.onTodoChanged(ctx, "todos-list");
+        watchFood.todos = ctx.state.todos;
+
         addListenerForAllTodos(ctx, this.watchers);
       })
     },
@@ -51,12 +61,12 @@ async function TodoApp() {
   }
 
   this.template = html `
-    <div>
-      <p> Hello how are you </p>
-      <input id="todo-input" placeholder="todo"/>
-      <button id="change-state"> Add Todo </button>
+    <div style="${styleObject}">
+      <p> TODOs Shop </p>
+      <input style="${inputObject}" id="todo-input" placeholder="todo"/>
+      <button style="${buttonObject}" id="change-state"> Add Todo </button>
+      <div id="todos-list"> ${todoList().doc} </div>
     </div>
-    <div id="todos-list"> ${todoList().doc} </div>
   `
 }
 
@@ -69,21 +79,20 @@ function isArrayEmpty(arr) {
 
 
 let addListenerForAllTodos = function (ctx, watchers) {
+  let element = {}
 
   ctx.state.todos.map(todo => {
-    console.log("The todo id", todo.id)
-    let element = UNF.Base.getElement(ctx, todo.id)
-    console.log("The element", element)
+    element = UNF.Base.getElement(ctx, todo.id)
     UNF.Base.addListener("onclick", element, (e) => {
 
-      let watchFood = watchers.onTodosChanged(ctx, "todos-list");
-
+      let watchFood = watchers.onTodoChanged(ctx, "todos-list");
       ctx.state.todos = ctx.state.todos.filter(function (value, index, arr) {
         return value.id != todo.id;
       });
 
       watchFood.todos = ctx.state.todos
       addListenerForAllTodos(ctx, watchers);
+
     });
   })
 }

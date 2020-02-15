@@ -114,7 +114,6 @@ UNF.Base = (function () {
    * @returns {void}
    */
   let render = (tagName, component) => {
-    console.log("The component", component === undefined);
     customElements.define(tagName, component);
     return component;
   };

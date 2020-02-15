@@ -62,10 +62,9 @@ UNF.Events = (function () {
 
   let rerender = (elem, content) => {
 
-    //The divs are separated by commas that are shown in the ui.
-    // let res = content.doc.replace(/,/g, " ");
-    console.log("THE RERENDER COMPONENT", content);
-    elem.innerHTML = content.doc;
+    //The divs are separated by commas that appear in the UI this replaces them with " " shown in the ui.
+    let res = content.doc.replace(/,/g, " ");
+    elem.innerHTML = res;
   };
 
   let bindRenderToStateChange = (ctx, elID, component, state) => {
