@@ -10,7 +10,8 @@ let props = {
 
 let newtemplate = html `
   <div>
-      <test-list props="${props}"> </test-list>
+      <!-- <test-list props=""> </test-list> -->
+      <todo-app> </todo-app>
   </div>
 `;
 

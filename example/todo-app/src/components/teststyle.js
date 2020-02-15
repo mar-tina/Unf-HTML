@@ -29,7 +29,7 @@ export let buttonObject = `
   margin: 20px;
   background: coral;
   border: none;
-  font-size: 20px;
+  font-size: 17px;
 `
 
 export let svgObject = `
