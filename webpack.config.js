@@ -1,40 +1,24 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
+const path = require('path');
 
 module.exports = {
-  entry: "./example/index.js",
+  entry: path.resolve(__dirname, 'src/element.js'),
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "index.js"
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.js',
+    library: '$',
+    libraryTarget: 'umd',
   },
-  mode: "development",
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "example/index.html"
-    }),
-    new webpack.ProvidePlugin({
-      TextDecoder: ["text-encoding", "TextDecoder"],
-      TextEncoder: ["text-encoding", "TextEncoder"]
-    })
-  ],
   module: {
-    rules: [
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"],
-            plugins: ["@babel/plugin-proposal-class-properties"]
-          }
-        }
-      }
-    ]
+    rules: [{
+      test: /\.(js)$/,
+      exclude: /node_modules/,
+      use: ['babel-loader'],
+    }, ],
   },
-  stats: {
-    colors: true
+  resolve: {
+    extensions: ['.js'],
+    modules: [path.resolve(__dirname, 'src')],
   },
-  devtool: "source-map"
+  mode: 'development',
+  devtool: 'sourceMap',
 };

@@ -58,9 +58,5 @@ var baseApp = {
 
 };
 
-const onChange = (objToWatch, onChangeFunction) => {};
-
-
-
 let base = UNF.Base.createElement(baseApp);
 export let unfBaseElement = base;

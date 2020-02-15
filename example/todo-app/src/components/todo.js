@@ -2,7 +2,7 @@ import {
   UNF,
   html,
   unfBaseElement
-} from '../../../../src'
+} from '../../../../dist/index.js';
 
 import {
   styleObject,
@@ -116,6 +116,9 @@ let todoList = (todos) => {
   }
 }
 
+console.log("THE UNF", UNF)
+
 TodoApp.call(unfBaseElement)
+
 
 UNF.Base.render("todo-app", unfBaseElement.ci);
