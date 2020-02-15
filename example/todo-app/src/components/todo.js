@@ -92,7 +92,6 @@ let addListenerForAllTodos = function (ctx, watchers) {
 
       watchTodo.todos = ctx.state.todos
       addListenerForAllTodos(ctx, watchers);
-
     });
   })
 }
