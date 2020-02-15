@@ -12,7 +12,6 @@ let BaseApp = {
   data: {
     food: "milk and cookies",
     diet: "none",
-    proxies: [],
   },
 
   methods: {
@@ -41,10 +40,7 @@ var baseApp = {
   data: {
     food: "milk and cookies",
     diet: "none",
-    todos: [{
-      todo: "name",
-      done: "false"
-    }]
+    todos: []
   },
 
   methods: {

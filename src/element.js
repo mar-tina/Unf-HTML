@@ -67,7 +67,6 @@ UNF.Base = (function () {
         UNF.Events.initState(this, BaseElement.data);
         this.state.watcher = this._onChanged;
 
-
         if (isFunction(BaseElement.template)) {
           let res = BaseElement.template();
           renderTemplate.innerHTML = res.doc;
@@ -154,19 +153,6 @@ UNF.Base = (function () {
   return bPublic;
 })();
 
-function onChanged(stateObject) {
-  const handler = {
-    get(target, property, receiver) {
-      if (property in target) {
-        console.log(`GET ${property}`);
-        return target[property];
-      }
-      return 'Oops! This property does not exist.';
-    }
-  };
-
-  const proxiedObject = new Proxy(stateObject, handler);
-}
 
 function isFunction(functionToCheck) {
   return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
