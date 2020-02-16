@@ -23,7 +23,7 @@ An library built in JS to understand JS internals using Shadow Dom
 
 -> Run the app:
 
-   ``` yarn server ```
+   ``` yarn serve ```
 
 TODO:
 
