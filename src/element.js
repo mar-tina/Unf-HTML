@@ -47,7 +47,6 @@ UNF.Base = (function () {
       watcher: {},
     };
 
-
     classInstance = class extends HTMLElement {
       connectedCallback() {
         UNF.Events.bindCycle(this, BaseElement.lifecyle.onMount);
@@ -65,16 +64,10 @@ UNF.Base = (function () {
         UNF.Events.initState(this, BaseElement.data);
         this.state.watcher = this._onChanged;
 
-        if (isFunction(BaseElement.template)) {
-          let res = BaseElement.template();
-          renderTemplate.innerHTML = res.doc;
-          this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
-          UNF.Events.registerEvents(this, BaseElement.methods);
-        } else {
-          renderTemplate.innerHTML = BaseElement.template.doc;
-          this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
-          UNF.Events.registerEvents(this, BaseElement.methods);
-        }
+        renderTemplate.innerHTML = BaseElement.template.doc;
+        this._shadowRoot.appendChild(renderTemplate.content.cloneNode(true));
+        UNF.Events.registerEvents(this, BaseElement.methods);
+
       }
 
       _onChanged(f, objToWatch) {
@@ -158,11 +151,6 @@ function isFunction(functionToCheck) {
 
 // HANDLING EVENTS
 
-export const onClick = f => ({
-  type: "event",
-  click: f
-});
-
 UNF.Events = (function () {
   /**
    * Passes the 'this' object to all the executing functions when node is mounted or unmounted
@@ -193,29 +181,7 @@ UNF.Events = (function () {
     }
   };
 
-  /**
-   * Passes the 'this' object to all the proxies providing reference to the current execution context
-   * @param {THIS} elem - object that has reference to the current execution context
-   * @param {*} proxies
-   */
-  let registerProxies = (elem, proxies) => {
-    console.log("Registering proxies");
-    if (isEmpty(proxies)) {
-      console.log("There are no proxies", proxies);
-    } else {
-      let arrayOfFuncs = Object.values(proxies);
-      arrayOfFuncs.forEach(func => {
-        func(elem);
-      });
-    }
-  };
-
-  let initState = (ctx, state) => {
-    ctx.state = state
-  };
-
   let rerender = (elem, content) => {
-
     //The divs are separated by commas that appear in the UI this replaces them with " " shown in the ui.
     let res = content.doc.replace(/,/g, " ");
     elem.innerHTML = res;
@@ -235,9 +201,7 @@ UNF.Events = (function () {
   var ePublic = {
     registerEvents: registerEvents,
     bindCycle: bindCycle,
-    initState: initState,
     rerender: rerender,
-    registerProxies: registerProxies,
     bindRenderToStateChange: bindRenderToStateChange
   };
 
@@ -253,35 +217,6 @@ function isEmpty(obj) {
 
 
 // HANDLING INIT
-
-let BaseApp = {
-
-  data: {
-    food: "milk and cookies",
-    diet: "none",
-  },
-
-  methods: {
-    useState: function (ctx) {
-      return `Context with state ${ctx}`
-    }
-  },
-
-  lifecycle: {
-    onMount: function (ctx) {
-      console.log("mounted context");
-    },
-  },
-
-  template: () => html `
-    <div> Is a todo noooe </div>
-  `,
-
-  get getState() {
-    console.log("WHY", data);
-  }
-
-}
 
 var baseApp = {
   data: {},
