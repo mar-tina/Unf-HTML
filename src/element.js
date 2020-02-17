@@ -109,7 +109,6 @@ UNF.Base = (function () {
     return component;
   };
 
-
   /**
    * Fetches an element by ID
    * @param {THIS} elem - object with reference to the currenc class in execution
@@ -187,13 +186,12 @@ UNF.Events = (function () {
     elem.innerHTML = res;
   };
 
-
   let bindRenderToStateChange = (ctx, elID, component, state) => {
     // let docToBind = UNF.Base.getELement(ctx, elID);
     let docToRerender = UNF.Base.getElement(ctx, elID);
     let res = component(state)
     if (res.doc === undefined) {
-      UNF.Events.rerender(docToRerender, html `<div> TodoList is empty </div>,`)
+      UNF.Events.rerender(docToRerender, html `<div> </div>,`)
     }
     UNF.Events.rerender(docToRerender, component(state))
   }
@@ -217,7 +215,6 @@ function isEmpty(obj) {
 
 
 // HANDLING INIT
-
 var baseApp = {
   data: {},
 

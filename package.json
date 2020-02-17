@@ -1,9 +1,7 @@
 {
   "scripts": {
     "build": "webpack",
-    "minify": "rollup -c",
-    "serve": "webpack-dev-server",
-    "transpile": "minify dist/index.js > unf_minified.js"
+    "serve": "webpack-dev-server"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -11,19 +9,14 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-classes": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
-    "@wasm-tool/wasm-pack-plugin": "0.4.2",
     "babel-minify": "^0.5.1",
     "html-webpack-plugin": "^3.2.0",
-    "jsdoc": "^3.6.3",
-    "rollup": "^1.31.1",
     "text-encoding": "^0.7.0",
     "webpack": "^4.29.4",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.0"
   },
   "dependencies": {
-    "babel-loader": "^8.0.6",
-    "on-change": "^1.6.2",
-    "snabbdom": "^0.7.4"
+    "babel-loader": "^8.0.6"
   }
 }
