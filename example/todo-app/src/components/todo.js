@@ -10,7 +10,7 @@ import {
   buttonObject,
   svgObject,
   todoItem
-} from "./teststyle.js";
+} from "./todoStyle";
 
 async function TodoApp() {
   this.data = {
