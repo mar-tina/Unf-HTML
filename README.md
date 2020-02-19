@@ -1,5 +1,5 @@
 # [Unf] unnecessary-library
-An library built in JS to understand JS internals using Shadow Dom
+An library built in JS to understand JS internals using Shadow Dom **Learning purposes only**
 
 ## To load the library 
 -> Clone the repo
