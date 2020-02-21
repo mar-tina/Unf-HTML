@@ -1,7 +1,7 @@
 # [Unf] unnecessary-library
 An library built in JS to understand JS internals using Shadow Dom **Learning purposes only**
 
-## To load the library 
+## Usage
 -> Clone the repo
 
    ``` git clone https://github.com/mar-tina/unf-element.git ```
